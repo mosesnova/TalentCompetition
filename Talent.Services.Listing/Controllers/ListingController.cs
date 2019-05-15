@@ -164,33 +164,36 @@ namespace Talent.Services.Listing.Controllers
         }
 
         [HttpGet("getSortedEmployerJobs")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "employer, recruiter")]
+       // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "employer, recruiter")]
         public async Task<IActionResult> GetSortedEmployerJobs(int activePage, string sortbyDate, bool showActive, bool showClosed, bool showDraft, bool showExpired, bool showUnexpired, string employerId = null, int limit = 6)
+       // public  Task<IActionResult> GetSortedEmployerJobs(int activePage, string sortbyDate, bool showActive, bool showClosed, bool showDraft, bool showExpired, bool showUnexpired, string employerId = null, int limit = 6)
         {
             try
             {
-                employerId = employerId == null ? _userAppContext.CurrentUserId : employerId;
+                //employerId = employerId == null ? _userAppContext.CurrentUserId : employerId;
+                employerId = "5cbfbc6d5c25e066d09d9c2e";
                 var sortedJobs = (await _jobService.GetEmployerJobsAsync(employerId));
+                //var sortedJobs = ( _jobService.GetEmployerJobsAsync(employerId));
 
-                if (!showActive)
-                {
-                    sortedJobs = sortedJobs.Where(x => x.Status != JobStatus.Active);
-                }
+                //if (!showActive)
+                //{
+                //    sortedJobs = sortedJobs.Where(x => x.Status != JobStatus.Active);
+                //}
 
-                if(!showClosed)
-                {
-                    sortedJobs = sortedJobs.Where(x => x.Status != JobStatus.Closed);
-                }
+                //if(!showClosed)
+                //{
+                //    sortedJobs = sortedJobs.Where(x => x.Status != JobStatus.Closed);
+                //}
 
-                if (!showExpired)
-                {
-                    sortedJobs = sortedJobs.Where(x => x.ExpiryDate >= DateTime.UtcNow);
-                }
+                //if (!showExpired)
+                //{
+                //    sortedJobs = sortedJobs.Where(x => x.ExpiryDate >= DateTime.UtcNow);
+                //}
 
-                if (!showUnexpired)
-                {
-                    sortedJobs = sortedJobs.Where(x => x.ExpiryDate < DateTime.UtcNow);
-                }
+                //if (!showUnexpired)
+                //{
+                //    sortedJobs = sortedJobs.Where(x => x.ExpiryDate < DateTime.UtcNow);
+                //}
 
                 //TODO Draft not implemented yet
                 //if (!showDraft)
@@ -207,8 +210,10 @@ namespace Talent.Services.Listing.Controllers
 
                 else
                 {
-                    var returnJobs = sortedJobs.OrderBy(x => x.CreatedOn).Skip((activePage - 1) * limit).Take(limit)
-                        .Select(x => new { x.Id, x.Title, x.Summary, x.JobDetails.Location, x.ExpiryDate, x.Status, noOfSuggestions = x.TalentSuggestions != null && x.TalentSuggestions.Count != 0 ? x.TalentSuggestions.Count : 0 });
+                    //var returnJobs = sortedJobs.OrderBy(x => x.CreatedOn).Skip((activePage - 1) * limit).Take(limit)
+                    //    .Select(x => new { x.Id, x.Title, x.Summary, x.JobDetails.Location, x.ExpiryDate, x.Status, noOfSuggestions = x.TalentSuggestions != null && x.TalentSuggestions.Count != 0 ? x.TalentSuggestions.Count : 0 });
+
+                    var returnJobs = sortedJobs;
                     return Json(new { Success = true, MyJobs = returnJobs, TotalCount = sortedJobs.Count() });
                 }                
             }
